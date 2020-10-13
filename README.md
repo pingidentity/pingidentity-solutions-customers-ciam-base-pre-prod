@@ -57,6 +57,11 @@ TBD
      * User: Administrator
      * Password: 2Federate
 
+   * PingDelegator
+     * Console URL: `https://localhost:6443`
+     * User: Administrator
+     * Password: 2Federate
+
 3. When you no longer want to run the solution, you can either stop or remove the stack.
 
    To stop the running stack (doesn't remove any of the containers or associated Docker networks), enter:
