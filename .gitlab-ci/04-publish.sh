@@ -3,10 +3,8 @@ set -euo pipefail
 
 echo "Pushing to GitHub..."
 
-git remote add github ssh://git@github.com:pingidentity/pingidentity-solutions-c360.git
-git fetch github
-git checkout github/"$CI_COMMIT_BRANCH" \
-  || git checkout -b github/"$CI_COMMIT_BRANCH"
-git pull --rebase "$CI_COMMIT_BRANCH" && git push
-git push github "$CI_COMMIT_TAG"
+git remote add github ssh://git@github.com/pingidentity/pingidentity-solutions-c360.git >/dev/null || echo 'Remote already exists, skipping creation.'
+git branch -M main
+git push -u github main
+
 exit 0
