@@ -62,7 +62,27 @@ TBD
      * User: Administrator
      * Password: 2FederateM0re
 
-3. When you no longer want to run the solution, you can either stop or remove the stack.
+3. How to test a SAML application/connection:
+    - From the PingFederate home page, select "SP Connections"
+    - Next, select the "Sample SAML Connection"
+    - Click on the "SSO Application Endpoint" URL presented at the top portion of the screen
+    - You will then be redirected to a Sign On screen
+    - Next, enter in a sample username, followed by the sample password. The sample users file can be found (the location below) within the PingDirectory Server Profile.
+      => ./server-profile/pingdirectory/pd.profile/ldif/userRoot/12-sampleusers.ldif
+    - After logging in with the sample username and password, you should be brought to a webpage containing a JSON object.
+    - You can now verify the SAML test was successful if a "SAMLResponse" is present in the "form" value
+
+4. How to test OAuth with a Sample User:
+    - Navigate to this URL (use localhost unless otherwise specified)
+      => <hostname>:9031/OAuthPlayground
+    - Select the "Submit" button at the bottom of the screen
+    - You will then be redirected to a Sign On screen
+    - Next, enter in a sample username, followed by the sample password. The sample users file can be found (the location below) within the PingDirectory Server Profile.
+      => ./server-profile/pingdirectory/pd.profile/ldif/userRoot/12-sampleusers.ldif
+    - You will then be redirected back to a similar screen. From here, click the "Submit" button once more.
+    - Step 3: TOKEN ENDPOINT page will then be presented. If the OAuth request and response was valid, you will see a "Parsed Response" of "HTTP Status: 200 OK" on the top right of your screen.
+
+5. When you no longer want to run the solution, you can either stop or remove the stack.
 
    To stop the running stack (doesn't remove any of the containers or associated Docker networks), enter:
 
