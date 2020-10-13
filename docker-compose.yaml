@@ -113,7 +113,7 @@ services:
       - pingdatasync-out:/opt/out
 
   pingdataconsole:
-    image: pingidentity/pingdataconsole:edge
+    image: pingidentity/pingdataconsole:latest
     ports:
       - "8443:8443"
     networks:

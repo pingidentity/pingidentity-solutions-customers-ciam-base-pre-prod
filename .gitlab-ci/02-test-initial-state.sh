@@ -5,7 +5,7 @@ set -xeo pipefail
 [ ! -f "$HOME"/.pingidentity/devops ] && \
   cat <<DEVOPS > "$HOME"/.pingidentity/devops
 PING_IDENTITY_ACCEPT_EULA=${PING_IDENTITY_ACCEPT_EULA:-YES}
-PING_IDENTITY_DEVOPS_USER=${PING_IDENTITY_DEVOPS_USER:-pd-governance-eng@pingidentity.com}
+PING_IDENTITY_DEVOPS_USER=${PING_IDENTITY_DEVOPS_USER:-pd-solutions@pingidentity.com}
 PING_IDENTITY_DEVOPS_KEY=${PING_IDENTITY_DEVOPS_KEY:-UNDEFINED}
 PING_IDENTITY_DEVOPS_HOME=${PING_IDENTITY_DEVOPS_HOME:-$HOME/projects/devops}
 PING_IDENTITY_DEVOPS_REGISTRY=${PING_IDENTITY_DEVOPS_REGISTRY:-docker.io/pingidentity}
@@ -24,7 +24,7 @@ fi
 docker-compose --verbose up \
   --detach \
   --remove-orphans \
-  --timeout 30 \
+  --timeout 60 \
   --force-recreate
 
 for script in $(find .gitlab-ci/test-initial-state.d -name "*.sh" | sort); do
