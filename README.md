@@ -60,7 +60,7 @@ TBD
    * PingDelegator
      * Console URL: `https://localhost:6443`
      * User: Administrator
-     * Password: 2Federate
+     * Password: 2FederateM0re
 
 3. When you no longer want to run the solution, you can either stop or remove the stack.
 
