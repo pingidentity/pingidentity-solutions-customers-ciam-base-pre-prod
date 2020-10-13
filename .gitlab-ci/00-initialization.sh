@@ -13,8 +13,8 @@ type envsubst
 envsubst --version
 type git
 git --version
-#type mdl
-#mdl --version
+type mdl
+mdl --version
 type shellcheck
 shellcheck --version
 type sed
