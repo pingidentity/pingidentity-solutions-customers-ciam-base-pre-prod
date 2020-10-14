@@ -8,6 +8,6 @@ then
     git push gh_location "$CI_COMMIT_TAG"
 fi
 
-git push gh_location main
+git push gh_location HEAD:main
 
 exit 0
