@@ -15,8 +15,8 @@ type git
 git --version
 #type mdl
 #mdl --version
-type shellcheck
-shellcheck --version
+# type shellcheck
+# shellcheck --version
 type sed
 sed --version
 exit 0
