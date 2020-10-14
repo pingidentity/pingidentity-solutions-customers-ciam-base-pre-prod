@@ -6,7 +6,7 @@
 #
 has_expected_num() {
   local _num_containers=$(docker container ls --format '{{json .Names}}' | \
-    wc -l) 
+    wc -l)
   [ "$_num_containers" = "${1:-0}" ]
 }
 
@@ -14,7 +14,7 @@ run_test() {
   _sleep_time_secs=60
   _wait_count=5
   _count=0
-  _expected_num_containers=4
+  _expected_num_containers=6
 
   echo "Test that there are $_expected_num_containers containers..."
 
