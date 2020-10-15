@@ -24,7 +24,7 @@ fi
 docker-compose --verbose up \
   --detach \
   --remove-orphans \
-  --timeout 60 \
+  --timeout 30 \
   --force-recreate
 
 for script in $(find .gitlab-ci/test-initial-state.d -name "*.sh" | sort); do

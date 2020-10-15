@@ -1,10 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Pushing to GitHub..."
+git remote add gh_location "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/pingidentity/pingidentity-solutions-c360.git"
 
-git remote add github ssh://git@github.com/pingidentity/pingidentity-solutions-c360.git >/dev/null || echo 'Remote already exists, skipping creation.'
-git branch -M main
-git push -u github main
+if test -n "$CI_COMMIT_TAG"
+then
+    git push gh_location "$CI_COMMIT_TAG"
+fi
+
+git push gh_location HEAD:main
 
 exit 0
