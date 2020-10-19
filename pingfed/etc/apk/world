@@ -1,0 +1,16 @@
+alpine-baselayout
+alpine-keys
+apk-tools
+busybox
+ca-certificates
+curl
+git
+git-lfs
+gnupg
+inotify-tools
+jq
+libc-utils
+libintl
+openssh-client
+parallel
+zip
