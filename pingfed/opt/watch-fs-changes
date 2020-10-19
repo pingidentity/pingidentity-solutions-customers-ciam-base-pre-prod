@@ -1,2 +1,0 @@
-#!/usr/bin/env sh
-inotifywait -r -m ${SERVER_ROOT_DIR} -e create,delete,modify | while read path event file ; do echo "${event}: ${path}${file}" ; done
