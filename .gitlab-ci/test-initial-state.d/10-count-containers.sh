@@ -11,7 +11,7 @@ has_expected_num() {
 }
 
 run_test() {
-  _sleep_time_secs=90
+  _sleep_time_secs=120
   _wait_count=5
   _count=0
   _expected_num_containers=6
