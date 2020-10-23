@@ -41,7 +41,7 @@ test-initial-state:
 postman_tests:
     stage: 02-test-solution
     image:
-      name: postman/neman_alpine33
+      name: postman/newman_alpine33
       entrypoint: [""]
     script:
       - newman --version
