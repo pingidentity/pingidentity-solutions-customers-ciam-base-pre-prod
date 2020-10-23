@@ -36,7 +36,7 @@ initialization:
 test-initial-state:
    stage: 01-test-initial-state
    script:
-    - "./.gitlab-ci/02-test-initial-state.sh"
+    - "./.gitlab-ci/01-test-initial-state.sh"
 
 postman_tests:
     stage: 02-test-solution
