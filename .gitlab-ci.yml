@@ -7,8 +7,8 @@ workflow:
 
 stages:
   - 00-initialization
-  - 01-validation
-  - 02-test-initial-state
+  - 01-test-initial-state
+  - 02-test-solution
   - 03-cleanup
   - 04-publish
 
@@ -33,15 +33,19 @@ initialization:
   script:
     - "./.gitlab-ci/00-initialization.sh"
 
-validation:
-  stage: 01-validation
-  script:
-    - "./.gitlab-ci/01-validation.sh"
-
 test-initial-state:
-   stage: 02-test-initial-state
+   stage: 01-test-initial-state
    script:
     - "./.gitlab-ci/02-test-initial-state.sh"
+
+postman_tests:
+    stage: 02-test-solution
+    image:
+      name: postman/neman_alpine33
+      entrypoint: [""]
+    script:
+      - newman --version
+      - newman run solutions_postman_collection.json
 
 cleanup:
   stage: 03-cleanup

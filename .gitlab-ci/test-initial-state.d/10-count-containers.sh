@@ -1,34 +1,23 @@
 #!/bin/bash
 
-#
-# Test that the number of containers matches the expected number.
-# @param $1 - The expected number of containers.
-#
-has_expected_num() {
-  local _num_containers=$(docker container ls --format '{{json .Names}}' | \
-    wc -l)
-  [ "$_num_containers" = "${1:-0}" ]
-}
+# Verify all 6 containers run from startup
+CONTAINERCOUNT=$(docker ps -q $1 -f status=running | wc -l)
+SECONDS=0
+SECONDSMAX=300
 
-run_test() {
-  _sleep_time_secs=120
-  _wait_count=5
-  _count=0
-  _expected_num_containers=6
-
-  echo "Test that there are $_expected_num_containers containers..."
-
-  while [ $_count -lt $_wait_count ]; do
-    if has_expected_num "$_expected_num_containers"; then
-      echo "Test succeeded."
-      return 0
+while [ $CONTAINERCOUNT -lt 6 -o $SECONDS -lt 300 ]
+do
+function countContainers() {
+    CONTAINERCOUNT=$(docker ps -q $1 -f status=running | wc -l)
+    echo "$CONTAINERCOUNT containers found. 6 containers expected..."
+    TIMEREMAINING=$(($SECONDSMAX-$SECONDS))
+    if [ $TIMEREMAINING -ne 300 ]; then
+        echo "$TIMEREMAINING more seconds allowed for test..."
     fi
-    echo "Waiting for container count to increase..."
-    _count=$(( _count + 1 ))
-    sleep $_sleep_time_secs
-  done
-
-  echo "Timeout occurred before test was successful."
-  return 1
+    if [ $CONTAINERCOUNT -eq 6 -o $SECONDS -eq 300 ]; then
+        exit
+    fi
+    sleep 60
 }
-
+countContainers
+done
