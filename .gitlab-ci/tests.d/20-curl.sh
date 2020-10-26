@@ -1,7 +1,7 @@
 #! /bin/bash
 
 SECONDS=0
-SECONDSMAX=1000
+SECONDSMAX=10000
 
 while [ "$USERSTATUS" != "200" ] & [ "$DIRSTATUS" != "200" ] & [ "$SAMLSTATUS" != "200" ] & [ "$OAUTHSTATUS" != "200" ]
 do
@@ -58,7 +58,7 @@ do
 
     TIMEREMAINING=$(($SECONDSMAX-$SECONDS))
     if [[ $TIMEREMAINING -le 0 ]]; then
-        exit
+        exit 1
     fi
 
     echo "Solution is not fully running. $TIMEREMAINING more seconds allowed for test..."
