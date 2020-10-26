@@ -1,7 +1,7 @@
 #! /bin/bash
 
 SECONDS=0
-SECONDSMAX=700
+SECONDSMAX=1000
 
 while [ "$USERSTATUS" != "200" ] & [ "$DIRSTATUS" != "200" ] & [ "$SAMLSTATUS" != "200" ] & [ "$OAUTHSTATUS" != "200" ]
 do
