@@ -8,8 +8,8 @@ workflow:
 stages:
   - 00-initialization
   - 01-test-solution
-  - 03-cleanup
-  - 04-publish
+  - 02-cleanup
+  - 03-publish
 
 default:
   image: "pingdevops.com/ci-utils/docker-builds-runner:edb6f37cedb342138aca215a69474e679b55390d5150ce8400eac264f2a864ae"
