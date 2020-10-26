@@ -1,5 +1,7 @@
 #!/bin/bash
-set -xeo pipefail
+#set -xeo pipefail
+set +x
+set -eo pipefail
 
 [ ! -d "$HOME"/.pingidentity ] && mkdir "$HOME"/.pingidentity
 [ ! -f "$HOME"/.pingidentity/devops ] && \
@@ -14,7 +16,7 @@ DEVOPS
 
 if [ ! -f .env ]; then
 current_branch=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-${CI_COMMIT_BRANCH:-$(git\
-  branch --show-current)}}
+  branch --show-current)}}=
 sed "s/<git_user>/$GITLAB_USER/;\
   s/<git_token>/$GITLAB_ACCESS_TOKEN/;\
   s/^SOLUTIONS_C360_PROFILE_BRANCH=.*$/SOLUTIONS_C360_PROFILE_BRANCH=$current_branch/" \
@@ -27,14 +29,7 @@ docker-compose --verbose up \
   --timeout 30 \
   --force-recreate
 
-for script in $(find .gitlab-ci/test-initial-state.d -name "*.sh" | sort); do
+for script in .gitlab-ci/tests.d/*.sh; do
+  bash $script || exit 1
   echo "Executing $script..."
-
-  # Clear any previous test function
-  unset -f run_test
-
-  # shellcheck disable=SC1090
-  . "$script" && run_test && echo "Successfully executed $script." || exit $?
 done
-
-exit 0

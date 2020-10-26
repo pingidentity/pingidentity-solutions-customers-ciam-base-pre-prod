@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 #
 # Ping Identity DevOps - CI scripts
-#
 # This script will cleanup a docker environment
-#
+
 test -n "${VERBOSE}" && set -x
 
 if test -z "${CI_COMMIT_REF_NAME}"
@@ -22,7 +21,6 @@ test -n "${_containers}" && docker container stop ${_containers}
 _containers=$( docker container ls -aq | sort | uniq )
 # shellcheck disable=SC2086
 test -n "${_containers}" && docker container rm -f ${_containers}
-
 
 imagesToClean=$( docker image ls -qf "reference=*/*/*${ciTag}" | sort | uniq )
 # shellcheck disable=SC2086
