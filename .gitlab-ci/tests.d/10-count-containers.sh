@@ -4,7 +4,8 @@
 CONTAINERCOUNT=$(docker ps -q $1 -f status=running | wc -l)
 CONTAINERSEXPECTED=6
 SECONDS=0
-SECONDSLIMIT=3000
+SECONDSMAX=3000
+SECONDSLIMIT=$(($SECONDSMAX+25))
 
 
 if [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
@@ -22,9 +23,16 @@ do
     CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}')
         #looks for unhealthy|starting containers
     if printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'starting'; then
+        echo "Waiting for containers to start..."
         echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting
+        #check if only 1 container is still starting
+        LINE_CHECK=$(echo -n "$CONT_STATUS" | grep -c '^')
+        if [[ $LINE_CHECK = 1 ]]; then
+            docker-compose logs -f
+        fi
+    #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
-        echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/: unhealthy/experienced a problem/'
+        echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
         exit 1
     else
         echo "$CONT_STATUS"
@@ -32,5 +40,10 @@ do
     fi
 
     sleep 20
+
+    #exit with error if time greater than allowed
+    if [[ $SECONDS -ge $SECONDSLIMIT ]]; then
+    exit 1
+    fi
 
 done

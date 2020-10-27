@@ -1,10 +1,17 @@
 #! /bin/bash
 
 SECONDS=0
-SECONDSMAX=10000
+SECONDSMAX=120
 
 while [ "$USERSTATUS" != "200" ] & [ "$DIRSTATUS" != "200" ] & [ "$SAMLSTATUS" != "200" ] & [ "$OAUTHSTATUS" != "200" ]
 do
+
+    TIMEREMAINING=$(($SECONDSMAX-$SECONDS))
+    if [[ $TIMEREMAINING -le 0 ]]; then
+        exit 1
+    fi
+    
+    echo "Validating that solution is running. $TIMEREMAINING more seconds allowed for test..."
     # Verify Sample Users were created successfully in PingDirectory
     USERSTATUS=$(curl --insecure --location -s -o /dev/null -w '%{http_code}' --request GET 'https://localhost:1443/directory/v1/uid=cdeacon,ou=People,dc=example,dc=com' \
     --header 'Authorization: Basic YWRtaW5pc3RyYXRvcjoyRmVkZXJhdGVNMHJl' \
@@ -55,13 +62,6 @@ do
     else
         echo "Sample User found in PingDirectory..."
     fi
-
-    TIMEREMAINING=$(($SECONDSMAX-$SECONDS))
-    if [[ $TIMEREMAINING -le 0 ]]; then
-        exit 1
-    fi
-
-    echo "Solution is not fully running. $TIMEREMAINING more seconds allowed for test..."
 
     sleep 20
 
