@@ -27,12 +27,14 @@ do
         echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting
         #check if only 1 container is still starting
         LINE_CHECK=$(echo -n "$CONT_STATUS" | grep -c '^')
-        if [[ $LINE_CHECK = 1 ]]; then
+        if [ $LINE_CHECK -eq 1 ]; then
+            echo $LINE_CHECK
             docker-compose logs -f
         fi
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
         echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
+        docker-compose logs -f
         exit 1
     else
         echo "$CONT_STATUS"
