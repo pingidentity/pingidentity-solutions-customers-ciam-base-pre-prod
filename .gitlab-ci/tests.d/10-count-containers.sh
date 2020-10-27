@@ -4,29 +4,33 @@
 CONTAINERCOUNT=$(docker ps -q $1 -f status=running | wc -l)
 CONTAINERSEXPECTED=6
 SECONDS=0
-SECONDSMAX=60
-SECONDSLIMIT=$(($SECONDSMAX+25))
+SECONDSLIMIT=3000
+
+
+if [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
+echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
+elif [ $CONTAINERCOUNT -ne $CONTAINERSEXPECTED ]; then
+echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
+exit 1 
+fi
+
+
+#CONTAINER_STATUS=$(docker ps --format '{{.Names}} {{.Status}}' | sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting)
 
 while [ $SECONDS -le $SECONDSLIMIT ]
 do
-function countContainers() {
-    CONTAINERCOUNT=$(docker ps -q $1 -f status=running | wc -l)
-    if [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
-        echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
-        exit 0
-    fi
-        echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
-        TIMEREMAINING=$(($SECONDSMAX-$SECONDS))
-    if [ $SECONDS -le $SECONDSMAX ]; then
-        echo "$TIMEREMAINING more seconds allowed for test..."
-    else
-        echo "Time limit exceeded. $SECONDSMAX seconds are allowed for test!"
+    CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}')
+        #looks for unhealthy|starting containers
+    if printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'starting'; then
+        echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting
+    elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
+        echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/: unhealthy/experienced a problem/'
         exit 1
+    else
+        echo "$CONT_STATUS"
+        exit 0    
     fi
 
     sleep 20
-}
-countContainers
-done
 
-exit 0
+done
