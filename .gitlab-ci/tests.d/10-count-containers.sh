@@ -25,6 +25,11 @@ do
     if printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'starting'; then
         echo "Waiting for containers to start..."
         echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting
+        #check if 3 or less containers running and then print docker logs
+        lines=$(echo $CONT_STATUS | wc -l)
+        if [ $lines -le 3 ]; then
+        docker-compose logs --tail="20"
+        fi
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
         echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
