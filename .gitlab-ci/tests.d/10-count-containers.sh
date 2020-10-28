@@ -9,9 +9,9 @@ SECONDSLIMIT=$(($SECONDSMAX+25))
 
 
 if [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
-echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
+echo "$CONTAINERCOUNT containers expected. $CONTAINERSEXPECTED containers found..."
 elif [ $CONTAINERCOUNT -ne $CONTAINERSEXPECTED ]; then
-echo "$CONTAINERCOUNT containers found. $CONTAINERSEXPECTED containers expected..."
+echo "$CONTAINERCOUNT containers expected. $CONTAINERSEXPECTED containers found..."
 exit 1 
 fi
 
@@ -24,11 +24,12 @@ do
         #looks for unhealthy|starting containers
     if printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'starting'; then
         echo "Waiting for containers to start..."
-        echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting
+        STARTING_CONT=$(echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting)
+        echo "$STARTING_CONT"
         #check if 3 or less containers running and then print docker logs
-        lines=$(echo $CONT_STATUS | wc -l)
-        if [ $lines -le 3 ]; then
-        docker-compose logs --tail="20"
+        LINE_CHECK=$(echo -n "$STARTING_CONT" | grep -c '^')
+        if (( $LINE_CHECK <= 3 )); then
+            docker-compose logs -f
         fi
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
