@@ -29,7 +29,7 @@ do
         #check if 3 or less containers running and then print docker logs
         LINE_CHECK=$(echo -n "$STARTING_CONT" | grep -c '^')
         if (( $LINE_CHECK <= 3 )); then
-            docker-compose logs -f
+            docker-compose logs --tail="20"
         fi
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
