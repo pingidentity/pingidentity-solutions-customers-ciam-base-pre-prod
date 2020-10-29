@@ -27,21 +27,33 @@ do
         STARTING_CONT=$(echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting)
         echo "$STARTING_CONT"
         #check if 3 or less containers running and then print docker logs
-        LINE_CHECK=$(echo -n "$STARTING_CONT" | grep -c '^')
-        if (( $LINE_CHECK <= 3 )); then
-            docker-compose logs --tail="20"
-        fi
+        #LINE_CHECK=$(echo -n "$STARTING_CONT" | grep -c '^')
+        #if (( $LINE_CHECK <= 3 )); then
+        #    docker-compose logs --tail="20"
+        #fi
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
-        echo "$CONT_STATUS" | grep "unhealthy" | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
-        docker-compose logs --tail="100"
-        exit 1
+        UNHEALTHY_CONT=$(echo "$CONT_STATUS" | grep "unhealthy")
+        if [ -z ${$PINGFED_COUNT+x} ]; then
+        PINGFED_COUNT=$SECONDS
+        fi
+        #check if pingfederate unhealthy, wait 60 seconds
+        if echo $UNHEALTHY_CONT | grep -q 'pingfederate' && (( $PINGFED_COUNT+60 <= $SECONDS )); then
+            echo $UNHEALTHY_CONT | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
+            docker-compose logs --tail="100"
+            exit 1
+        #if pingfederate not in there anymore and something is unhealthy then exit 1
+        elif echo $UNHEALTHY_CONT | grep -qv 'pingfederate'; then
+            echo $UNHEALTHY_CONT | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
+            docker-compose logs --tail="100"
+            exit 1
+        fi
     else
         echo "$CONT_STATUS"
         exit 0    
     fi
 
-    sleep 20
+    sleep 30
 
     #exit with error if time greater than allowed
     if [[ $SECONDS -ge $SECONDSLIMIT ]]; then
