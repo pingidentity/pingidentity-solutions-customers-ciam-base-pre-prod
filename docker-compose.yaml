@@ -137,6 +137,6 @@ networks:
 
 volumes:
   pingfederate-out:
-  pingdirectory-out:
+  #pingdirectory-out:
   pingcentral-out:
   pingdatasync-out:
