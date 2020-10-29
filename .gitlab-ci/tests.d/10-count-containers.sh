@@ -34,7 +34,7 @@ do
     #exit with error if any container is in an unhealthy state
     elif printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'unhealthy'; then
         UNHEALTHY_CONT=$(echo "$CONT_STATUS" | grep "unhealthy")
-        if [ -z ${$PINGFED_COUNT+x} ]; then
+        if  ${PINGFED_COUNT+"false"} ; then
         PINGFED_COUNT=$SECONDS
         fi
         #check if pingfederate unhealthy, wait 60 seconds
@@ -53,7 +53,7 @@ do
         exit 0    
     fi
 
-    sleep 30
+    sleep 33
 
     #exit with error if time greater than allowed
     if [[ $SECONDS -ge $SECONDSLIMIT ]]; then
