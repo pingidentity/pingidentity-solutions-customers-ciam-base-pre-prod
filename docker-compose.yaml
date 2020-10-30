@@ -70,7 +70,7 @@ services:
       - pingnet
     volumes:
        - ./server-profile/pingdirectory:/opt/in
-       #- pingdirectory-out:/opt/out
+       - pingdirectory-out:/opt/out
 
   pingcentral:
     image: pingidentity/pingcentral:latest
@@ -139,6 +139,6 @@ networks:
 
 volumes:
   pingfederate-out:
-  #pingdirectory-out:
+  pingdirectory-out:
   pingcentral-out:
   pingdatasync-out:
