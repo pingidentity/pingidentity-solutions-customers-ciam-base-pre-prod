@@ -54,13 +54,13 @@ services:
     #     - USER_BASE_DN=o=sync
     env_file:
       - ${HOME}/.pingidentity/devops
-    ulimits:
-      nproc:
-        soft: 16384
-        hard: 16384
-      nofile:
-        soft: 65535
-        hard: 65535
+    #ulimits:
+      #nproc:
+      #  soft: 16384
+      #  hard: 16384
+      #nofile:
+      #  soft: 65535
+      #  hard: 65535
     ports:
       - "1636:636"
       - "1443:443"

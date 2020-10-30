@@ -9,9 +9,9 @@ SECONDSLIMIT=$(($SECONDSMAX+25))
 
 
 if [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
-echo "$CONTAINERCOUNT containers expected. $CONTAINERSEXPECTED containers found..."
+echo "$CONTAINERSEXPECTED containers expected. $CONTAINERCOUNT containers found..."
 elif [ $CONTAINERCOUNT -ne $CONTAINERSEXPECTED ]; then
-echo "$CONTAINERCOUNT containers expected. $CONTAINERSEXPECTED containers found..."
+echo "$CONTAINERSEXPECTED containers expected. $CONTAINERCOUNT containers found..."
 exit 1 
 fi
 
@@ -21,7 +21,15 @@ fi
 while [ $SECONDS -le $SECONDSLIMIT ]
 do
     CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}')
-        #looks for unhealthy|starting containers
+    #check that we still have $CONTAINERSEXPECTED num of containers. error if we don't.
+    CONTAINERCOUNT=$(echo "$CONT_STATUS" | wc -l)
+    if [ $CONTAINERCOUNT -ne $CONTAINERSEXPECTED ]; then
+        #if there's less containers (i.e. directory dies), print the docker logs and exit 1.
+        echo "$CONTAINERSEXPECTED containers expected. $CONTAINERCOUNT containers found..."
+        docker-compose logs --tail="100"
+        exit 1
+    fi
+    #looks for unhealthy|starting containers     
     if printf '%s\n' "${CONT_STATUS[@]}" | grep -q 'starting'; then
         echo "Waiting for containers to start..."
         STARTING_CONT=$(echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting)
@@ -53,7 +61,7 @@ do
         exit 0    
     fi
 
-    sleep 60
+    sleep 20
 
     #exit with error if time greater than allowed
     if [[ $SECONDS -ge $SECONDSLIMIT ]]; then

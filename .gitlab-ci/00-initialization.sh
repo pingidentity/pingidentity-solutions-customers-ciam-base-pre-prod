@@ -15,4 +15,5 @@ type git
 git --version
 type sed
 sed --version
+cat /proc/meminfo
 exit 0
