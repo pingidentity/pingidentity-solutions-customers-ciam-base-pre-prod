@@ -16,7 +16,7 @@ default:
   services:
     - name: "docker:18.09-dind"
   tags:
-    - k8s
+    - customer360
 
 variables:
   DOCKER_HOST: "tcp://localhost:2375"
