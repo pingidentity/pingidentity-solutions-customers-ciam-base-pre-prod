@@ -53,15 +53,16 @@ services:
     #     - SERVER_PROFILE_PATH=customer360/server-profile/pingdirectory
     #     - USER_BASE_DN=o=sync
           - USER_BASE_DN=dc=example,dc=com
+          - MAX_HEAP_SIZE=768m
     env_file:
       - ${HOME}/.pingidentity/devops
-    #ulimits:
-      #nproc:
-      #  soft: 16384
-      #  hard: 16384
-      #nofile:
-      #  soft: 65535
-      #  hard: 65535
+    ulimits:
+      nproc:
+        soft: 16384
+        hard: 16384
+      nofile:
+        soft: 65535
+        hard: 65535
     ports:
       - "1636:636"
       - "1443:443"
@@ -88,6 +89,7 @@ services:
     volumes:
       - ./server-profile/pingcentral/dev-unsecure:/opt/in
       - pingcentral-out:/opt/out
+
 
   pingdatasync:
     image: pingidentity/pingdatasync:latest
