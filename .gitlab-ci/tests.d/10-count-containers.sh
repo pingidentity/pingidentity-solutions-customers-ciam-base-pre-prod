@@ -34,7 +34,6 @@ do
         echo "Waiting for containers to start..."
         STARTING_CONT=$(echo "$CONT_STATUS" |  sed -e 's/Up.* (/: /g' -e 's/)//g' | grep starting)
         echo "$STARTING_CONT"
-        docker-compose logs --tail="100"
         #check if 3 or less containers running and then print docker logs
         #LINE_CHECK=$(echo -n "$STARTING_CONT" | grep -c '^')
         #if (( $LINE_CHECK <= 3 )); then
@@ -62,7 +61,7 @@ do
         exit 0    
     fi
 
-    #sleep 90
+    sleep 90
 
     #exit with error if time greater than allowed
     if [[ $SECONDS -ge $SECONDSLIMIT ]]; then
