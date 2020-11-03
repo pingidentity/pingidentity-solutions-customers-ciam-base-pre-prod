@@ -53,7 +53,7 @@ services:
     #     - SERVER_PROFILE_PATH=customer360/server-profile/pingdirectory
     #     - USER_BASE_DN=o=sync
           - USER_BASE_DN=dc=example,dc=com
-          - MAX_HEAP_SIZE=1000m
+          - MAX_HEAP_SIZE=500m
     env_file:
       - ${HOME}/.pingidentity/devops
     ulimits:
