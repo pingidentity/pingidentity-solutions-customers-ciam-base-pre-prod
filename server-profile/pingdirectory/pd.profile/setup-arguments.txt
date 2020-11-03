@@ -9,7 +9,7 @@
     --httpsPort 443 \
     --enableStartTLS \
     --jvmTuningParameter AGGRESSIVE \
-    --maxHeapSize 768m \
+    #--maxHeapSize 768m \
     --usePkcs12KeyStore /opt/out/instance/config/keystore.p12 \
     --keyStorePasswordFile /opt/out/instance/config/keystore.pin \
     --usePkcs12TrustStore /opt/out/instance/config/truststore.p12 \
