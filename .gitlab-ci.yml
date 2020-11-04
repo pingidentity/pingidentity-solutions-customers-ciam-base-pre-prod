@@ -36,6 +36,11 @@ test-solution:
     stage: 01-test-solution
     script:
       - "./.gitlab-ci/01-test-initial-state.sh"
+    variables:
+      KUBERNETES_CPU_REQUEST: 3
+      KUBERNETES_CPU_LIMIT: 3
+      KUBERNETES_MEMORY_REQUEST: 4000000000
+      KUBERNETES_MEMORY_LIMIT: 4000000000
 
 cleanup:
   stage: 02-cleanup
