@@ -2,7 +2,7 @@
 # Runs automated API calls against running solution to verify software is configured and/or connected
 
 #get docker network name
-DOCKER_NW=$(docker network ls | grep workforce | awk '{print $2}')
+DOCKER_NW=$(docker network ls | grep customer | awk '{print $2}')
 
 POSTMANRUN=$(docker run -t --network="$DOCKER_NW" postman/newman run --insecure https://api.getpostman.com/collections/12861248-cc188562-59d9-4326-9fc0-6bcbd709f934?apikey=PMAK-5fa05c0fc71f0b0034f573fa-bdbe88e369e218ea4fc92d2c86bec6b555)
 
