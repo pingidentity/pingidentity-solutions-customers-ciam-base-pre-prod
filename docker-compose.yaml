@@ -27,12 +27,6 @@ services:
   pingfederate:
     image: pingidentity/pingfederate:latest
     command: wait-for pingdirectory:389 -t 600 -- entrypoint.sh start-server
-    #environment:
-    #  - SERVER_PROFILE_URL=https://github.com/pingidentity/pingidentity-server-profiles.git
-    #  - SERVER_PROFILE_PATH=baseline/pingfederate
-    #    - SERVER_PROFILE_URL=https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/pingidentity/ping-celero
-    #    - SERVER_PROFILE_PATH=customer360/server-profile/pingfederate
-    #  - VERBOSE=false
     env_file:
       - ${HOME}/.pingidentity/devops
     ports:
@@ -46,12 +40,9 @@ services:
 
   pingdirectory:
     image: pingidentity/pingdirectory:latest
-    #environment:
-    #     - SERVER_PROFILE_URL=https://github.com/pingidentity/pingidentity-server-profiles.git
-    #     - SERVER_PROFILE_PATH=baseline/pingdirectory
-    #     - SERVER_PROFILE_URL=https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/pingidentity/ping-celero
-    #     - SERVER_PROFILE_PATH=customer360/server-profile/pingdirectory
-    #     - USER_BASE_DN=o=sync
+    environment:
+          - USER_BASE_DN=dc=example,dc=com
+          - MAX_HEAP_SIZE=768m
     env_file:
       - ${HOME}/.pingidentity/devops
     ulimits:
@@ -61,6 +52,7 @@ services:
       nofile:
         soft: 65535
         hard: 65535
+    tmpfs: /run/secrets
     ports:
       - "1636:636"
       - "1443:443"
@@ -71,29 +63,71 @@ services:
        - ./server-profile/pingdirectory:/opt/in
        - pingdirectory-out:/opt/out
 
-  pingcentral:
-    image: pingidentity/pingcentral:latest
-    environment:
-      #- SERVER_PROFILE_URL=https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/pingidentity/ping-celero
-      #- SERVER_PROFILE_PATH=customer360/server-profile/pingcentral/dev-unsecure
-      - PING_CENTRAL_BLIND_TRUST=true
-      - PING_CENTRAL_LOG_LEVEL=DEBUG
-    env_file:
-      - ${HOME}/.pingidentity/devops
+  pingdataconsole:
+    image: pingidentity/pingdataconsole:latest
     ports:
-      - "9022:9022"
+      - "8443:8443"
     networks:
       - pingnet
+
+  pingcentral:
+    image: pingidentity/pingcentral:latest
+    command: /tmp/pingcentral_db/pingcentral_standup.sh
+    environment:
+      - PING_CENTRAL_BLIND_TRUST=true
+      - PING_CENTRAL_LOG_LEVEL=DEBUG
+      - PING_CENTRAL_VERIFY_HOSTNAME=false
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=2Federate
+    env_file:
+      - ${HOME}/.pingidentity/devops
     volumes:
-      - ./server-profile/pingcentral/dev-unsecure:/opt/in
+      - ./server-profile/pingcentral/external-mysql-db/instance:/opt/in/instance
+      - ./server-profile/pingcentral:/opt/in
       - pingcentral-out:/opt/out
+      - ./server-profile/pingcentral_db:/tmp/pingcentral_db
+    ports:
+      - "9022:9022"
+    depends_on:
+      - "pingcentral-db"
+    networks:
+      - pingnet
+
+  pingcentral-db:
+    image: mysql
+    cap_add:
+      - SYS_NICE
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 2Federate
+    volumes:
+      - pingcentral_db-out:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - pingnet
+
+  pingcentral-db-loader:
+    image: mysql
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mysql -hpingcentral-db -uroot -p2Federate -Dpingcentral < /docker-entrypoint-initdb.d/env_conf.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: 2Federate
+    volumes:
+      - ./server-profile/pingcentral_db/env_conf.sql:/docker-entrypoint-initdb.d/env_conf.sql
+    networks:
+      - pingnet
+    depends_on:
+      pingcentral:
+        condition: service_healthy
 
   pingdatasync:
     image: pingidentity/pingdatasync:latest
     environment:
-      #- SERVER_PROFILE_URL=https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/pingidentity/ping-celero
-      #- SERVER_PROFILE_PATH=customer360/server-profile/pingdatasync
-      - USER_BASE_DN=o=sync
+      - USER_BASE_DN=dc=example,dc=com
     env_file:
       - ${HOME}/.pingidentity/devops
     ulimits:
@@ -112,19 +146,10 @@ services:
       - ./server-profile/pingdatasync:/opt/in
       - pingdatasync-out:/opt/out
 
-  pingdataconsole:
-    image: pingidentity/pingdataconsole:latest
-    ports:
-      - "8443:8443"
-    networks:
-      - pingnet
-
   pingdelegator:
     image: pingidentity/pingdelegator:latest
     environment:
       - PD_ENGINE_PUBLIC_PORT=1443
-      #- SERVER_PROFILE_URL=https://github.com/pingidentity/pingidentity-server-profiles.git
-      #- SERVER_PROFILE_PATH=baseline/pingdelegator
     env_file:
       - ${HOME}/.pingidentity/devops
     ports:
@@ -140,3 +165,4 @@ volumes:
   pingdirectory-out:
   pingcentral-out:
   pingdatasync-out:
+  pingcentral_db-out:

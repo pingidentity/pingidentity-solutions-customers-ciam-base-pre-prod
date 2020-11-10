@@ -1,9 +1,0 @@
-# To override the default server ports, copy this file to .env and edit the variables below.
-SOLUTIONS_C360_PORT=7443
-SOLUTIONS_C360_PORT=8443
-SOLUTIONS_C360_CONSOLE_PORT=5443
-
-# You should not need to modify the below variables
-SOLUTIONS_C360_PROFILE_BRANCH=main
-SOLUTIONS_C360_REGISTRY=docker.io/pingidentity
-SOLUTIONS_C360_TAG=latest
