@@ -1,4 +1,6 @@
 #!/bin/bash
+# Script to verify features and types
+
 set -xeo pipefail
 
 pwd
@@ -7,6 +9,7 @@ echo "$USER"
 type jq
 type docker
 docker info
+docker version
 type docker-compose
 docker-compose version
 type envsubst

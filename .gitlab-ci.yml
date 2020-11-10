@@ -23,8 +23,8 @@ variables:
   DOCKER_API_VERSION: "1.39"
   KUBERNETES_CPU_REQUEST: "1250m"
   KUBERNETES_CPU_LIMIT: "2000m"
-  KUBERNETES_MEMORY_REQUEST: "2000Mi"
-  KUBERNETES_MEMORY_LIMIT: "2000Mi"
+  KUBERNETES_MEMORY_REQUEST: "2555Mi"
+  KUBERNETES_MEMORY_LIMIT: "2555Mi"
   KUBERNETES_POLL_TIMEOUT: 600
 
 initialization:
@@ -36,11 +36,6 @@ test-solution:
     stage: 01-test-solution
     script:
       - "./.gitlab-ci/01-test-initial-state.sh"
-    variables:
-      KUBERNETES_CPU_REQUEST: 3
-      KUBERNETES_CPU_LIMIT: 3
-      KUBERNETES_MEMORY_REQUEST: 4000000000
-      KUBERNETES_MEMORY_LIMIT: 4000000000
 
 cleanup:
   stage: 02-cleanup

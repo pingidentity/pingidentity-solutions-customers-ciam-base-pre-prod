@@ -1,5 +1,6 @@
 #!/bin/bash
-#set -xeo pipefail
+# Sets variables along with starting solution
+
 set +x
 set -eo pipefail
 
@@ -23,13 +24,16 @@ sed "s/<git_user>/$GITLAB_USER/;\
   .gitlab-ci/env-template-dev.txt >.env
 fi
 
-docker-compose --verbose up \
+#log into pdsolutions docker account
+cat docker/pdsolutions | docker login --username pdsolutions --password-stdin
+
+docker-compose up \
   --detach \
   --remove-orphans \
   --timeout 30 \
   --force-recreate
 
 for script in .gitlab-ci/tests.d/*.sh; do
-  bash $script || exit 1
   echo "Executing $script..."
+  bash $script || exit 1
 done
