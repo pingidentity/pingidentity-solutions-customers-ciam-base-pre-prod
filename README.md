@@ -1,4 +1,3 @@
-
 # Customer360 Solution
 
 ## Overview
@@ -24,7 +23,7 @@ The full set of our DevOps images is automatically pulled from our repository, i
 
 Enter **Ctrl+C** to exit the display.
 
-c. Use either of these commands to display the status of the Docker containers in the stack:
+#### c. Use either of these commands to display the status of the Docker containers in the stack:
 
 
 * `docker ps` (enter this at intervals)
