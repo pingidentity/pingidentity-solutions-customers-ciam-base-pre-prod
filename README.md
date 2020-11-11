@@ -1,4 +1,3 @@
-
 # Customer360 Solution
 
 ## Overview
@@ -90,7 +89,7 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
 - You will be redirected to a Sign On screen.
 
 - Next, enter in a sample username, followed by the sample password. The sample users file can be found within the PingDirectory Server Profile located at:
- `./server-profile/pingdirectory/pd.profile/ldif/userRoot/12-sampleusers.ldif`
+ `./server-profile/pingdirectory/pd.profile/ldif/userRoot/20-sampleusers.ldif`
 
 - After logging in with the sample username and password, you should be brought to a webpage containing a JSON object.
 
@@ -109,7 +108,7 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
 
 - Next, enter in a sample username, followed by the sample password. The sample users file can be found within the PingDirectory Server Profile located at:
 
-  `./server-profile/pingdirectory/pd.profile/ldif/userRoot/12-sampleusers.ldif`
+  `./server-profile/pingdirectory/pd.profile/ldif/userRoot/20-sampleusers.ldif`
 
 - You will then be redirected back to a similar screen. From here, click the **Submit** button once more.
 
