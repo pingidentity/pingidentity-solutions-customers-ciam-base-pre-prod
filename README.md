@@ -133,7 +133,21 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
 
 - Hit the return (or Enter) key to display all users from PingDirectory.
 
-### 6. How to stop or remove the stack:
+### 6. For information on using Identity Adapters for specific use cases, see example application files in assets directory:
+
+Adapters included:
+- PingID SDK integration kit
+- PingOne for customers integration kit
+- PingOne for customer provisioning adapter
+- Google Cloud Identity Connector 1.4.1
+- Amazon Cloud Identity Connector 1.0
+- Agentless Integration Kit 1.5.2
+- Apple Cloud Identity Connector 1.0.1
+- Facebook Cloud Identity Connector 2.0.1
+- LinkedIn Cloud Identity Connector 2.1
+- Twitter Cloud Identity Connector 1.3
+ 
+### 7. How to stop or remove the stack:
 
 - To stop the running stack (does not remove any containers or associated Docker networks):
 
