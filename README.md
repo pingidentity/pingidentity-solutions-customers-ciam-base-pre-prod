@@ -2,7 +2,7 @@
 
 ## Overview
 
-Below are steps on how to deploy the solution along with testing a couple of features
+pingidentity-solutions-customers-ciam-base-pre-prod is designed for pre-production customer environments in ciam use cases.
 
 ## Deploying using Docker-Compose
 
