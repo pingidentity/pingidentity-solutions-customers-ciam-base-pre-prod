@@ -3,20 +3,25 @@
 #set -x
 
 CONTAINERCOUNT=$(docker ps --format '{{.Names}}' -f status=running | grep -v pingcentral-db-loader | wc -l)
-CONTAINERSEXPECTED=7
+#igmoring dbloader because we don't care about that. get the list of container names from docker-compose and sort
+EXPECTED_CONT=$(cat docker-compose.yaml | grep -B 1 "image:" | sed -e '/image/d' -e '/loader/d' -e '/--/d' -e s'/://' -e 's/^[[:space:]]*//'  | sort -u)
+CONTAINERSEXPECTED=$(echo "$EXPECTED_CONT" | wc -l)
+#CONTAINERSEXPECTED=7
 SECONDS=0
 SECONDSMAX=3000
 SECONDSLIMIT=$(($SECONDSMAX+25))
 
 while [ $SECONDS -le $SECONDSLIMIT ]
 do
-    CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}')
+    #CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}')
+    CONT_STATUS=$(docker ps --format '{{.Names}} {{.Status}}' | sort -u)
     #check that we still have $CONTAINERSEXPECTED num of containers. error if we don't.
     CONTAINERCOUNT=$(echo "$CONT_STATUS" | grep -v pingcentral-db-loader | wc -l)
-    if [ $CONTAINERCOUNT -ne $CONTAINERSEXPECTED ]; then
+    if [ $CONTAINERCOUNT -lt $CONTAINERSEXPECTED ]; then
         #if there's less containers (i.e. directory dies), print the docker logs and exit 1.
         echo "$CONTAINERSEXPECTED containers expected. $CONTAINERCOUNT containers found..."
     echo "$CONT_STATUS"
+        diff <(echo "$CONT_STATUS" | sed -e s'@'"${PWD##*/}_"'@@' -e s'/_.*//') <(echo "$EXPECTED_CONT") | awk '{print "Warning: Container(s) " $0 " stopped"}'
         docker-compose logs --tail="100"
         exit 1
     fi
