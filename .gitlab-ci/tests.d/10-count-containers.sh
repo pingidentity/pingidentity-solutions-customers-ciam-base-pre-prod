@@ -2,7 +2,6 @@
 # Verify all 6 containers run from startup
 #set -x
 
-CONTAINERCOUNT=$(docker ps --format '{{.Names}}' -f status=running | grep -v pingcentral-db-loader | wc -l)
 #igmoring dbloader because we don't care about that. get the list of container names from docker-compose and sort
 EXPECTED_CONT=$(cat docker-compose.yaml | grep -B 1 "image:" | sed -e '/image/d' -e '/loader/d' -e '/--/d' -e s'/://' -e 's/^[[:space:]]*//'  | sort -u)
 CONTAINERSEXPECTED=$(echo "$EXPECTED_CONT" | wc -l)
