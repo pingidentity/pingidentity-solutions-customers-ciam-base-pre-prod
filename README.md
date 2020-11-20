@@ -86,7 +86,7 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
 
 - From the PingFederate home page, select **SP Connections**.
 
-- Next, select the **Sample SAML Connection**.
+- Next, select the **Ping SAML Consumer**.
 
 - Click on the **SSO Application Endpoint** hyperlink presented at the top portion of the screen.
 
@@ -97,9 +97,9 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
   `./server-profile/pingdirectory/pd.profile/ldif/userRoot/20-sampleusers.ldif`
 
 
-- After logging in with the sample username and password, you should be brought to a webpage containing a JSON object.
+- After logging in with the sample username and password, you will be brought to a webpage labeled **Assertion Validator**.
 
-- You can now verify the SAML test was successful if a **SAMLResponse** is present in the **form** value.
+- You can now verify the SAML test was successful if a **Success** message is present.
 
 ### 4. How to test OAuth with a Sample User:
 
@@ -116,35 +116,35 @@ Refer to the [Devops GitBook](https://pingidentity-devops.gitbook.io/devops/) fo
 - Next, enter in a sample username, followed by the sample password. The sample users file can be found within the PingDirectory Server Profile located at:
 
   `./server-profile/pingdirectory/pd.profile/ldif/userRoot/20-sampleusers.ldif`
-  
+
 - You will then be redirected back to a similar screen. From here, click the **Submit** button once more.
-  
+
 - **TOKEN ENDPOINT** page will then be presented. If the OAuth request and response was valid, you will see a **Parsed Response** of **HTTP Status: 200 OK** on the top right of your screen.
 
-  
+
 ### 5. How to view your sample users in PingDelegator:
 
-  
+
 - Navigate to the following URL:
 
     `https://localhost:6443`
   *(use `localhost` unless otherwise specified)*
 
  - Log into the administrator account:
-  
+
   Username: `Administrator`
 
    Password: `2FederateM0re`
 
 - You will then be brought to a **Search Users** page.
-  
+
 - To view all users, click inside the **Search Users by...** text box.
 
  - Hit the return (or Enter) key to display all users from PingDirectory.
 
 ### 6. For information on using Identity Adapters for specific use cases, see example application files in assets directory:
 
-  
+
 
 Adapters included:
 
@@ -160,7 +160,7 @@ Adapters included:
 - Twitter Cloud Identity Connector 1.3
 
 ### 7. How to stop or remove the stack:
-  
+
 
 - To stop the running stack (does not remove any containers or associated Docker networks):
 
