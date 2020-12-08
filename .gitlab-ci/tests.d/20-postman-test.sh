@@ -1,7 +1,7 @@
 #!/bin/bash
 # Runs automated API calls against running solution to verify software is configured and/or connected
 
-#get docker network name
+# Get docker network name
 PROJECT_DIR_NAME=$(pwd | awk -F "/" '{print $NF}')
 DOCKER_NW=$(docker network ls | grep $PROJECT_DIR_NAME | awk '{print $2}')
 
