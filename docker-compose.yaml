@@ -41,8 +41,8 @@ services:
   pingdirectory:
     image: pingidentity/pingdirectory:latest
     environment:
-          - USER_BASE_DN=dc=example,dc=com
-          - MAX_HEAP_SIZE=768m
+      - USER_BASE_DN=dc=example,dc=com
+      - MAX_HEAP_SIZE=768m
     env_file:
       - ${HOME}/.pingidentity/devops
     ulimits:

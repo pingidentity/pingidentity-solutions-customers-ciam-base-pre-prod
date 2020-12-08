@@ -1,5 +1,5 @@
 #!/bin/bash
-# Verify all 6 containers run from startup
+# Verify all containers run from startup
 #set -x
 
 #ignoring dbloader because we don't care about that. get the list of container names from docker-compose and sort
@@ -18,7 +18,7 @@ do
         echo "$CONTAINERSEXPECTED containers expected. $CONTAINERCOUNT containers found..."
         echo "$CONT_STATUS"
         diff <(echo "$CONT_STATUS" | sed -e s'@'"${PWD##*/}_"'@@' -e s'/_.*//') <(echo "$EXPECTED_CONT") | awk '{print "Warning: Container(s) " $0 " stopped"}'
-        docker-compose logs --tail="100"
+        docker-compose logs --tail="200"
         exit 1
     fi
     #looks for unhealthy|starting containers
@@ -31,11 +31,11 @@ do
         if  ${UNHEALTHY_TIMER+"false"} ; then
         UNHEALTHY_TIMER=$SECONDS+120
         fi
-        #check if pingfederate unhealthy, wait 1200 seconds
+        #check if container is unhealthy, wait 120 seconds
         if [ $UNHEALTHY_TIMER -le $SECONDS ]; then
-            echo "Waiting 90 seconds for containers to become healthy..."
+            echo "Waiting 120 seconds for containers to become healthy..."
             echo $UNHEALTHY_CONT | sed -e 's/Up.*unhealthy)/Error: is unhealthy. /'
-            docker-compose logs --tail="100"
+            docker-compose logs --tail="200"
             echo "$CONT_STATUS"
             exit 1
         fi
@@ -55,7 +55,7 @@ do
     #if no containers remaining in capture move on
     if [ "${STARTING_CONT:-0}" == 0 ] && [ $CONTAINERCOUNT -eq $CONTAINERSEXPECTED ]; then
     exit 0
-    fi 
+    fi
 
     #wait
     sleep 30
