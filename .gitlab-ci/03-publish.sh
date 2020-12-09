@@ -6,8 +6,11 @@ set -x
 #used for edge or early access releases or for main release
 if [[ $CI_COMMIT_TAG == *"edge"* ]]; then
     BRANCH="edge"
-else
+elif [[ $CI_COMMIT_TAG == *"main"* ]]; then
     BRANCH="main"
+else
+    echo "Commit tag does not match expected version format. . ."
+    exit 1   
 fi
 
 #check if this is workforce360 or customer360 before defining which to publish to.
