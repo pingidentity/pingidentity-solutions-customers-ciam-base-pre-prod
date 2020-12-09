@@ -13,18 +13,6 @@ else
     exit 1   
 fi
 
-#check if this is workforce360 or customer360 before defining which to publish to.
-if [[ $CI_PROJECT_PATH == "solutions/customer360" ]]; then
-    GITHUB_REPO_NAME="pingidentity-solutions-customers-ciam-base-pre-prod.git"
-elif [[ $CI_PROJECT_PATH == "solutions/workforce360" ]]; then
-    GITHUB_REPO_NAME="pingidentity-solutions-customers-wf-base-pre-prod.git"
-else
-    #something is wrong and that's bad. Let's stop.
-    echo "Repo name not found in Solutions project list"
-    exit 1
-fi
-
-
 #check if the git remote value is already defined
 GITLOCATION=$(git remote -v)
 GITLOCATIONCHECK=$(echo "$GITLOCATION" | awk '/fetch/ && /push/')
