@@ -8,7 +8,10 @@ pingidentity-solutions-customers-ciam-base-pre-prod is designed for pre-producti
 
 ### 1. How to deploy the CIAM Base Pre-Prod solution stack:
 
-> For your initial deployment of the stack, we recommend you make no changes to the **docker-compose.yaml** file to ensure you have a successful first-time deployment.
+* For your initial deployment of the stack, we recommend you make no changes to the **docker-compose.yaml** file to ensure you have a successful first-time deployment.
+
+* You must edit the default Docker Desktop Resources for the instance to properly start. Within the Docker Desktop Preferences, select **Resources > Advanced**.
+     * Memory should be set to 4 GB minimum, with 6+ GB recommended depending on available system resources. 
 
 #### a. To start the stack, go to your local **CIAM Base Pre-Prod** directory and enter:
 
